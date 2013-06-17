@@ -1,5 +1,6 @@
 import os
 import pymongo
+from urlparse import urlparse
 
 MONGO_URL = os.environ.get('MONGOHQ_URL')
 RUNNING_LOCAL = False

@@ -1,7 +1,6 @@
 import os
 import json
 from bson import json_util
-from urlparse import urlparse
 import urllib2
 import urllib
 import contextlib
