@@ -25,10 +25,12 @@ def _to_json(mongo_obj):
 	return json.dumps(mongo_obj, ensure_ascii=False, default=json_util.default)
 
 
-def _resp(data):
-	r = make_response(_to_json(data))
-	r.headers['Access-Control-Allow-Origin'] = "*"
-	r.headers['Content-Type'] = "application/json; charset=utf-8"
+def _resp(data=None, code=200):
+	headers = {}
+	if data:
+		headers['Content-Type'] = "application/json; charset=utf-8"
+	headers['Access-Control-Allow-Origin'] = "*"
+	r = make_response((_to_json(data) if data else "", code, headers))
 	return r
 
 
@@ -39,7 +41,7 @@ def locate(addr):
 		o = json.load(wwwfile)
 
 	if not o:
-		return _resp("ERROR")
+		return _resp(code=404)
 
 	coords = []
 	lon = float(o[0]['lon'])
@@ -51,7 +53,7 @@ def locate(addr):
 	if gush:
 		return _resp({ "gush_id": gush['gush_id'], "lon": lon, "lat": lat})
 	else:
-		abort(404)
+		return _resp(code=404)
 
 
 #### MAIN ####
